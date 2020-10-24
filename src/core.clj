@@ -31,5 +31,4 @@
                                     (pop-stack)
                                     (:run-state))
                                [3 2 1])]
-    (assert (= value 5))
-    (assert (= state [4 3 2 1]))))
+    (assert (and (= value 5) (= state [4 3 2 1])))))
