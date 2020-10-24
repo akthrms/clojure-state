@@ -25,6 +25,8 @@
   ([value] (bind-state (fn [s] (put-state (cons value s))) (get-state)))
   ([value stack] (bind-state (fn [_] (push-stack value)) stack)))
 
+;; Main
+
 (defn -main []
   (let [{:keys [value state]} ((->> (push-stack 4)
                                     (push-stack 5)
