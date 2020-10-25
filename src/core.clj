@@ -4,21 +4,23 @@
 
 (defrecord State [run-state])
 
+(defrecord StateResult [value state])
+
 (defn bind-state [func state]
   (->State (fn [s]
              (let [{:keys [value state]} ((:run-state state) s)]
                ((:run-state (func value)) state)))))
 
 (defn get-state []
-  (->State (fn [s] {:value s :state s})))
+  (->State (fn [s] (->StateResult s s))))
 
 (defn put-state [state]
-  (->State (fn [_] {:value nil :state state})))
+  (->State (fn [_] (->StateResult nil state))))
 
 ;; Stack
 
 (defn pop-stack
-  ([] (->State (fn [s] {:value (first s) :state (rest s)})))
+  ([] (->State (fn [s] (->StateResult (first s) (rest s)))))
   ([stack] (bind-state (fn [_] (pop-stack)) stack)))
 
 (defn push-stack
@@ -27,7 +29,7 @@
 
 ;; Main
 
-(defn -main []
+(defn -main [& _]
   (let [{:keys [value state]} ((->> (push-stack 4)
                                     (push-stack 5)
                                     (pop-stack)
